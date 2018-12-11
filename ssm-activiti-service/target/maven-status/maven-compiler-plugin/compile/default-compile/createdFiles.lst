@@ -1,0 +1,6 @@
+com\activiti\demo\flow\service\FlowService.class
+com\activiti\demo\service\BaseService.class
+com\activiti\demo\service\OrderService.class
+com\activiti\demo\service\ProductService.class
+com\activiti\demo\service\CustomerService.class
+com\activiti\demo\service\OrderDetailService.class

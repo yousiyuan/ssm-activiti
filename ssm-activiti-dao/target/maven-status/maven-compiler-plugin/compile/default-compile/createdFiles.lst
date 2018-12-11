@@ -1,0 +1,5 @@
+com\activiti\demo\dao\OrdersDao.class
+com\activiti\demo\dao\CustomersDao.class
+com\activiti\demo\dao\ProductsDao.class
+com\activiti\demo\dao\BaseDao.class
+com\activiti\demo\dao\OrderDetailsDao.class

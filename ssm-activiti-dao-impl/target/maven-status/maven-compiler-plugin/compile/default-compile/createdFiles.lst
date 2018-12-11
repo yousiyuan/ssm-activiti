@@ -1,0 +1,5 @@
+com\activiti\demo\dao\impl\OrdersDaoImpl.class
+com\activiti\demo\dao\impl\ProductsDaoImpl.class
+com\activiti\demo\dao\impl\CustomersDaoImpl.class
+com\activiti\demo\dao\impl\BaseDaoImpl.class
+com\activiti\demo\dao\impl\OrderDetailsDaoImpl.class

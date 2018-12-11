@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<context:component-scan base-package="com.activiti.demo" />
+
+<!--
+	引入数据源配置文件
+	<context:property-placeholder location="classpath:db-oracle.properties" />
+	<context:property-placeholder location="classpath:db-mysql.properties" />
+
+	不使用数据库连接池
+	<context:property-placeholder location="classpath:db-oracle.properties" />
+	<bean id="dataSourceBean" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driverClass}"></property>
+		<property name="url" value="${jdbc.jdbcUrl}"></property>
+		<property name="username" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean>
+	使用c3p0数据库连接池
+	<context:property-placeholder location="classpath:db-mysql.properties" />
+	<bean id="dataSourceBean" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="user" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		<property name="driverClass" value="${jdbc.driverClass}"></property>
+		<property name="jdbcUrl" value="${jdbc.jdbcUrl}"></property>
+		<property name="initialPoolSize" value="${jdbc.initialPoolSize}"></property>
+		<property name="maxIdleTime" value="${jdbc.maxIdleTime}"></property>
+		<property name="maxPoolSize" value="${jdbc.maxPoolSize}"></property>
+		<property name="minPoolSize" value="${jdbc.minPoolSize}"></property>
+		<property name="maxStatements" value="${jdbc.maxStatements}"></property>
+	</bean>
+	使用阿里巴巴druid连接池
+	<bean id="dataSourceBean" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="url" value="${jdbc.jdbcUrl}" />
+		<property name="username" value="${jdbc.user}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="driverClassName" value="${jdbc.driverClass}" />
+		初始化连接大小
+		<property name="initialSize" value="0"></property>
+		连接池最大使用连接数量
+		<property name="maxActive" value="20"></property>
+		连接池最小空闲
+		<property name="minIdle" value="0" />
+		获取连接最大等待时间
+		<property name="maxWait" value="60000" />
+		<property name="filters" value="mergeStat" />
+	</bean>
+-->
+
+	<!-- $$$$$$$$$$$$$$$$$$$$$$$$$$$ Activiti流程引擎数据库相关配置 $$$$$$$$$$$$$$$$$$$$$$$$$$$ -->
+
+	<bean id="activitiDataSourceBean" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
+		<property name="url" value="jdbc:mysql://192.168.1.110:3306/springactiviti?characterEncoding=utf-8&amp;serverTimezone=UTC&amp;useSSL=false"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value="mjcy1989"></property>
+	</bean>
+
+	<bean id="sqlSessionFactoryForActiviti" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="activitiDataSourceBean"></property>
+	</bean>
+
+	<!-- txManagerForActiviti和txManager各自管理activitiDataSourceBean和dataSourceBean的事务，互补干涉 -->
+	<bean id="txManagerForActiviti" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="activitiDataSourceBean"></property>
+	</bean>
+	<!-- 启用对事务注解的支持 -->
+	<!-- @Transactional(value = "txManagerForActiviti", rollbackFor = Exception.class) -->
+	<tx:annotation-driven proxy-target-class="true" transaction-manager="txManagerForActiviti"/>
+	<import resource="classpath:activiti.cfg.xml"/>
+
+	<!-- $$$$$$$$$$$$$$$$$$$$$$$$$$$ 业务数据库相关配置 $$$$$$$$$$$$$$$$$$$$$$$$$$$ -->
+
+	<context:property-placeholder location="classpath:db-oracle.properties" />
+	<!-- 使用阿里巴巴druid连接池 -->
+	<bean id="dataSourceBean" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="url" value="${jdbc.jdbcUrl}" />
+		<property name="username" value="${jdbc.user}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="driverClassName" value="${jdbc.driverClass}" />
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="0"></property>
+		<!-- 连接池最大使用连接数量 -->
+		<property name="maxActive" value="20"></property>
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="0" />
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="60000" />
+		<property name="filters" value="mergeStat" />
+		<!-- 监控数据库 -->
+		<!-- <property name="filters" value="stat" /> -->
+	</bean>
+
+	<!-- Spring与MyBatis的整合配置 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSourceBean"></property>
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+	</bean>
+
+	<!-- 创建SqlSession的Bean -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	<!-- 定义事务的管理器 -->
+	<!-- txManagerForActiviti和txManager各自管理activitiDataSourceBean和dataSourceBean的事务，互补干涉 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSourceBean"></property>
+	</bean>
+	<!-- 启用对事务注解的支持 -->
+	<!-- @Transactional(value = "txManager", rollbackFor = Exception.class) -->
+	<tx:annotation-driven proxy-target-class="true" transaction-manager="txManager"/>
+
+	<!-- 通知配置 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<!-- 具体的方法的配置 -->
+			<tx:method name="insert*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="query*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 切面配置 -->
+	<aop:config>
+		<aop:advisor advice-ref="txAdvice" pointcut="execution(* com.activiti.demo.service..*.*(..))" />
+	</aop:config>
+
+</beans>

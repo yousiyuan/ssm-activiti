@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.activiti.flow.demo.service.impl.test.FlowServiceImplTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.524 sec - in com.activiti.flow.demo.service.impl.test.FlowServiceImplTest

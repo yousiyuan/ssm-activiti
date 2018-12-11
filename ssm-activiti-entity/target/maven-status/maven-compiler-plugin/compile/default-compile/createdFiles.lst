@@ -1,0 +1,5 @@
+com\activiti\demo\entity\Products.class
+com\activiti\demo\entity\OrderDetails.class
+com\activiti\demo\entity\Customers.class
+com\activiti\demo\entity\Orders.class
+com\activiti\flow\variables\Employee.class

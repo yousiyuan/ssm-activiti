@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>ssm-activiti-dao</artifactId>
+	<packaging>jar</packaging>
+
+	<name>ssm-activiti-dao</name>
+	<url>http://maven.apache.org</url>
+
+	<!-- parent用于继承 -->
+	<parent>
+		<!-- 父工程坐标 -->
+		<groupId>com.activiti.demo</groupId>
+		<artifactId>ssm-activiti-web-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<!-- 父工程的pom相对路径 -->
+		<relativePath>../ssm-activiti-web-parent/pom.xml</relativePath>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.activiti.demo</groupId>
+			<artifactId>ssm-activiti-entity</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+
+</project>

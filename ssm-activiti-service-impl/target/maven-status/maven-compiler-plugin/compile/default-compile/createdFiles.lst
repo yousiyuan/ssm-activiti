@@ -1,0 +1,10 @@
+com\activiti\demo\flow\listener\MyTaskListener.class
+com\activiti\demo\service\impl\CustomerServiceImpl.class
+com\activiti\demo\flow\listener\DynamicGroupTaskListener.class
+com\activiti\demo\flow\service\impl\FlowServiceImpl.class
+com\activiti\demo\service\impl\OrderServiceImpl.class
+com\activiti\demo\flow\listener\DynamicGroupTaskListener$UserTaskNodes.class
+com\activiti\demo\service\impl\OrderDetailServiceImpl.class
+com\activiti\demo\flow\listener\MyTaskListener$UserTaskNodes.class
+com\activiti\demo\service\impl\BaseServiceImpl.class
+com\activiti\demo\service\impl\ProductServiceImpl.class
